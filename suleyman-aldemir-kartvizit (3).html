@@ -1,0 +1,517 @@
+<html lang="tr"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Süleyman Aldemir — Dijital Kartvizit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0a0a;
+    --surface:#141311;
+    --surface-2:#1b1a17;
+    --border:#2a2823;
+    --border-soft:#221f1a;
+    --amber:#d8862e;
+    --amber-dim:#8a5c22;
+    --text:#f3f1ea;
+    --text-dim:#9c988c;
+    --text-faint:#6b6860;
+    --radius:14px;
+    --font-display:'Space Grotesk',sans-serif;
+    --font-body:'Inter',sans-serif;
+    --font-mono:'IBM Plex Mono',monospace;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  body{
+    background:var(--bg);
+    background-image:
+      radial-gradient(circle at 15% 0%, rgba(216,134,46,0.06), transparent 40%),
+      repeating-linear-gradient(115deg, transparent, transparent 68px, rgba(216,134,46,0.025) 68px, rgba(216,134,46,0.025) 69px);
+    color:var(--text);
+    font-family:var(--font-body);
+    min-height:100vh;
+    padding:20px 16px 48px;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  a{color:inherit; text-decoration:none;}
+  button{font:inherit; color:inherit; background:none; border:none; cursor:pointer;}
+
+  .page{
+    max-width:460px;
+    margin:0 auto;
+  }
+
+  /* top bar */
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    font-family:var(--font-mono);
+    font-size:11px;
+    color:var(--text-dim);
+    letter-spacing:0.04em;
+    padding:2px 4px 16px;
+  }
+  .status{display:flex; align-items:center; gap:7px;}
+  .dot{
+    width:6px; height:6px; border-radius:50%;
+    background:#5fbf7a;
+    box-shadow:0 0 0 3px rgba(95,191,122,0.15);
+    animation:pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse{0%,100%{opacity:1;} 50%{opacity:0.45;}}
+
+  /* nav tabs */
+  .tabs{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:6px;
+    margin-bottom:22px;
+  }
+  .tab{
+    font-family:var(--font-mono);
+    font-size:10.5px;
+    letter-spacing:0.02em;
+    text-align:center;
+    padding:9px 4px;
+    border:1px solid var(--border-soft);
+    border-radius:999px;
+    color:var(--text-faint);
+    background:var(--surface);
+    transition:border-color .18s ease, color .18s ease, background .18s ease;
+  }
+  .tab:hover{color:var(--text-dim); border-color:var(--border);}
+  .tab.active{
+    background:var(--amber);
+    color:#1c1204;
+    border-color:var(--amber);
+    font-weight:500;
+  }
+  .tab:focus-visible{outline:2px solid var(--amber); outline-offset:2px;}
+
+  /* hero */
+  .hero{padding:6px 4px 0;}
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:11px;
+    color:var(--amber);
+    letter-spacing:0.06em;
+    margin-bottom:14px;
+  }
+  .eyebrow::before{content:"— "; color:var(--amber-dim);}
+  h1{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:clamp(38px, 10vw, 46px);
+    line-height:1.04;
+    letter-spacing:-0.01em;
+  }
+  .lead{
+    margin-top:16px;
+    font-size:15px;
+    line-height:1.6;
+    color:var(--text-dim);
+    max-width:38ch;
+  }
+  .lead b{color:var(--text); font-weight:500;}
+  .loc{
+    margin-top:18px;
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--text-faint);
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+
+  /* divider */
+  .divider{
+    margin:30px 0;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .divider .line{
+    flex:1;
+    height:0;
+    border-top:1px dashed var(--border);
+  }
+  .divider svg{flex-shrink:0; display:block;}
+
+  /* section headers */
+  .section-head{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    margin-bottom:14px;
+    padding:0 4px;
+  }
+  .section-head .num{
+    font-family:var(--font-mono);
+    font-size:11px;
+    color:var(--amber-dim);
+    border:1px solid var(--border);
+    border-radius:5px;
+    padding:2px 6px;
+  }
+  .section-head h2{
+    font-family:var(--font-display);
+    font-size:14px;
+    font-weight:600;
+    letter-spacing:0.03em;
+    color:var(--text-dim);
+  }
+
+  /* quick access */
+  .quick-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+  }
+  .qbtn{
+    background:var(--surface);
+    border:1px solid var(--border-soft);
+    border-radius:12px;
+    padding:16px 6px 12px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:9px;
+    font-size:11px;
+    color:var(--text-dim);
+    transition:border-color .18s ease, transform .12s ease, background .18s ease;
+  }
+  .qbtn svg{width:19px; height:19px; stroke:var(--amber);}
+  .qbtn:hover{border-color:var(--amber-dim); background:var(--surface-2);}
+  .qbtn:active{transform:scale(0.96);}
+  .qbtn:focus-visible{outline:2px solid var(--amber); outline-offset:2px;}
+
+  /* link list */
+  .link-list{list-style:none;}
+  .row{
+    border:1px solid var(--border-soft);
+    border-radius:12px;
+    background:var(--surface);
+    margin-bottom:8px;
+    overflow:hidden;
+  }
+  .row-head{
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:13px;
+    padding:14px 14px;
+    text-align:left;
+  }
+  .row-icon{
+    width:34px; height:34px;
+    border-radius:9px;
+    background:var(--surface-2);
+    border:1px solid var(--border-soft);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .row-icon svg{width:16px; height:16px; stroke:var(--amber);}
+  .row-body{flex:1; min-width:0;}
+  .row-title{
+    font-size:14px;
+    font-weight:500;
+    color:var(--text);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .row-sub{
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--text-faint);
+    margin-top:3px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .badge{
+    font-family:var(--font-mono);
+    font-size:9.5px;
+    letter-spacing:0.04em;
+    color:var(--amber);
+    border:1px solid var(--amber-dim);
+    border-radius:4px;
+    padding:1.5px 5px;
+  }
+  .chevron{
+    width:15px; height:15px;
+    stroke:var(--text-faint);
+    flex-shrink:0;
+    transition:transform .22s ease;
+  }
+  .row.open .chevron{transform:rotate(180deg);}
+  .row-panel{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .25s ease;
+  }
+  .row.open .row-panel{max-height:70px;}
+  .row-panel-inner{
+    padding:0 14px 14px 61px;
+    display:flex;
+    gap:8px;
+  }
+  .mini-btn{
+    font-size:12px;
+    font-family:var(--font-mono);
+    color:var(--text-dim);
+    border:1px solid var(--border);
+    border-radius:7px;
+    padding:6px 10px;
+    display:flex;
+    align-items:center;
+    gap:5px;
+  }
+  .mini-btn:hover{border-color:var(--amber-dim); color:var(--text);}
+  .mini-btn svg{width:12px; height:12px; stroke:currentColor;}
+  .row-head:focus-visible{outline:2px solid var(--amber); outline-offset:-2px;}
+
+  footer{
+    text-align:center;
+    margin-top:38px;
+    font-family:var(--font-mono);
+    font-size:10.5px;
+    color:var(--text-faint);
+    letter-spacing:0.03em;
+    line-height:1.8;
+  }
+  footer .name{color:var(--text-dim);}
+
+  .sr-only{
+    position:absolute; width:1px; height:1px;
+    overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap;
+  }
+
+  /* tablet + up */
+  @media (min-width:700px){
+    body{padding:48px 24px 64px;}
+    .page{max-width:660px;}
+    .tabs{gap:8px; margin-bottom:30px;}
+    .tab{font-size:11.5px; padding:11px 6px;}
+    .topbar{font-size:12px; padding-bottom:22px;}
+    h1{font-size:58px;}
+    .lead{font-size:16px; max-width:46ch;}
+    .quick-grid{gap:12px;}
+    .qbtn{padding:22px 8px 16px; font-size:12px;}
+    .qbtn svg{width:22px; height:22px;}
+    .link-list{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+    }
+    .row{margin-bottom:0;}
+    .row-panel-inner{padding-left:14px;}
+    footer{margin-top:48px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="topbar">
+    <span class="status"><span class="dot"></span>Çevrimiçi</span>
+    <span>TR / Balıkesir · <time id="clock">02:31</time></span>
+  </div>
+
+  
+
+  <section id="kokpit" class="hero">
+    <p class="eyebrow">Dijital Kartvizit</p>
+    <h1>Süleyman<br>Aldemir</h1>
+    <p class="lead">Operasyon &amp; <b>Havacılık Teknolojileri</b> Profesyoneli — araç/filo takibi, İHA operasyonları ve gömülü yazılım geçmişiyle çok yönlü teknik operasyon uzmanı.</p>
+    <p class="loc">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-7.58 7-13a7 7 0 1 0-14 0c0 5.42 7 13 7 13z"></path><circle cx="12" cy="9" r="2.5"></circle></svg>
+      Balıkesir, Türkiye · 39.6484°K 27.8826°D
+    </p>
+  </section>
+
+  <div class="divider" aria-hidden="true">
+    <span class="line"></span>
+    <svg width="64" height="16" viewBox="0 0 64 16"><polyline points="0,8 14,8 20,2 26,14 32,4 38,12 44,8 64,8" fill="none" stroke="#8a5c22" stroke-width="1.4"></polyline></svg>
+    <span class="line"></span>
+  </div>
+
+  <section id="hizli-erisim" aria-labelledby="hizli-erisim-h">
+    <div class="section-head">
+      <span class="num">01</span>
+      <h2 id="hizli-erisim-h">Hızlı Erişim</h2>
+    </div>
+    <div class="quick-grid">
+      <a class="qbtn" href="tel:+905464704249">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92z"></path></svg>
+        Ara
+      </a>
+      <a class="qbtn" href="https://wa.me/905464704249" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+        WhatsApp
+      </a>
+      <a class="qbtn" href="mailto:suleymanaldemir657@hotmail.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 6-10 7L2 6"></path></svg>
+        E-posta
+      </a>
+      <button class="qbtn" id="vcard-btn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        Rehbere Ekle
+      </button>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true">
+    <span class="line"></span>
+    <svg width="64" height="16" viewBox="0 0 64 16"><polyline points="0,8 14,8 20,2 26,14 32,4 38,12 44,8 64,8" fill="none" stroke="#8a5c22" stroke-width="1.4"></polyline></svg>
+    <span class="line"></span>
+  </div>
+
+  <section id="iletisim" aria-labelledby="iletisim-h">
+    <div class="section-head">
+      <span class="num">02</span>
+      <h2 id="iletisim-h">İletişim &amp; Bağlantılar</h2>
+    </div>
+    <ul class="link-list" id="link-list"><li class="row"><button type="button" class="row-head" aria-expanded="false"><span class="row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92z"></path></svg></span><span class="row-body"><span class="row-title">Telefon</span><span class="row-sub">0546 470 42 49</span></span><svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div class="row-panel"><div class="row-panel-inner"><a class="mini-btn" href="tel:+905464704249" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>Aç</a><button class="mini-btn" data-copy="0546 470 42 49" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>Kopyala</button></div></div></li><li class="row"><button type="button" class="row-head" aria-expanded="false"><span class="row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 6-10 7L2 6"></path></svg></span><span class="row-body"><span class="row-title">E-posta</span><span class="row-sub">suleymanaldemir657@hotmail.com</span></span><svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div class="row-panel"><div class="row-panel-inner"><a class="mini-btn" href="mailto:suleymanaldemir657@hotmail.com" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>Aç</a><button class="mini-btn" data-copy="suleymanaldemir657@hotmail.com" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>Kopyala</button></div></div></li><li class="row"><button type="button" class="row-head" aria-expanded="false"><span class="row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor"></circle></svg></span><span class="row-body"><span class="row-title">Instagram</span><span class="row-sub">@suleymanaldemir9</span></span><svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div class="row-panel"><div class="row-panel-inner"><a class="mini-btn" href="https://instagram.com/suleymanaldemir9" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>Aç</a></div></div></li><li class="row"><button type="button" class="row-head" aria-expanded="false"><span class="row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z" style="display:none"></path><path d="M16 8a6 6 0 0 1 6 6v6h-4v-6a2 2 0 0 0-4 0v6h-4V9h4v1.5A5 5 0 0 1 16 8z"></path><rect x="2" y="9" width="4" height="11"></rect><circle cx="4" cy="4" r="2"></circle></svg></span><span class="row-body"><span class="row-title">LinkedIn</span><span class="row-sub">süleyman-aldemir-47a506124</span></span><svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div class="row-panel"><div class="row-panel-inner"><a class="mini-btn" href="https://linkedin.com/in/süleyman-aldemir-47a506124" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>Aç</a></div></div></li><li class="row"><button type="button" class="row-head" aria-expanded="false"><span class="row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"></path></svg></span><span class="row-body"><span class="row-title">Online Özgeçmiş</span><span class="row-sub">ozgecmisim-nu.vercel.app</span></span><svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div class="row-panel"><div class="row-panel-inner"><a class="mini-btn" href="https://ozgecmisim-nu.vercel.app" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>Aç</a></div></div></li><li class="row"><button type="button" class="row-head" aria-expanded="false"><span class="row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></span><span class="row-body"><span class="row-title">Özgeçmiş (CV)<span class="badge">PDF</span></span><span class="row-sub">Google Drive üzerinde görüntüle</span></span><svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div class="row-panel"><div class="row-panel-inner"><a class="mini-btn" href="https://drive.google.com/file/d/1UEFU31dKmxo8kMrfEjPIbeKQwVZFEYDT/view?usp=sharing" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>Aç</a></div></div></li><li class="row"><button type="button" class="row-head" aria-expanded="false"><span class="row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></span><span class="row-body"><span class="row-title">Ek Belge<span class="badge">PDF</span></span><span class="row-sub">Google Drive üzerinde görüntüle</span></span><svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div class="row-panel"><div class="row-panel-inner"><a class="mini-btn" href="https://drive.google.com/file/d/1UEFU31dKmxo8kMrfEjPIbeKQwVZFEYDT/view?usp=sharing" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>Aç</a></div></div></li></ul>
+  </section>
+
+  <footer id="gunluk">
+    <p class="name">SÜLEYMAN ALDEMİR — DİJİTAL KARTVİZİT</p>
+    <p>2026 · Tüm bağlantılar tek dokunuşla erişilebilir</p>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  var ICONS = {
+    phone:'<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92z"/>',
+    mail:'<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/>',
+    insta:'<rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor"/>',
+    linkedin:'<path d="M4 4h16v16H4z" style="display:none"/><path d="M16 8a6 6 0 0 1 6 6v6h-4v-6a2 2 0 0 0-4 0v6h-4V9h4v1.5A5 5 0 0 1 16 8z"/><rect x="2" y="9" width="4" height="11"/><circle cx="4" cy="4" r="2"/>',
+    globe:'<circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/>',
+    file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>',
+    copy:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+    ext:'<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>'
+  };
+
+  var DRIVE_URL = "https://drive.google.com/file/d/1UEFU31dKmxo8kMrfEjPIbeKQwVZFEYDT/view?usp=sharing";
+
+  var items = [
+    {icon:'phone', title:'Telefon', sub:'0546 470 42 49', href:'tel:+905464704249', action:'copy', copyVal:'0546 470 42 49'},
+    {icon:'mail', title:'E-posta', sub:'suleymanaldemir657@hotmail.com', href:'mailto:suleymanaldemir657@hotmail.com', action:'copy', copyVal:'suleymanaldemir657@hotmail.com'},
+    {icon:'insta', title:'Instagram', sub:'@suleymanaldemir9', href:'https://instagram.com/suleymanaldemir9', action:'open'},
+    {icon:'linkedin', title:'LinkedIn', sub:'süleyman-aldemir-47a506124', href:'https://linkedin.com/in/süleyman-aldemir-47a506124', action:'open'},
+    {icon:'globe', title:'Online Özgeçmiş', sub:'ozgecmisim-nu.vercel.app', href:'https://ozgecmisim-nu.vercel.app', action:'open'},
+    {icon:'file', title:'Özgeçmiş (CV)', sub:'Google Drive üzerinde görüntüle', href:DRIVE_URL, action:'open', badge:'PDF'},
+    {icon:'file', title:'Ek Belge', sub:'Google Drive üzerinde görüntüle', href:DRIVE_URL, action:'open', badge:'PDF'}
+  ];
+
+  var list = document.getElementById('link-list');
+  items.forEach(function(it, i){
+    var li = document.createElement('li');
+    li.className = 'row';
+
+    var head = document.createElement('button');
+    head.type = 'button';
+    head.className = 'row-head';
+    head.setAttribute('aria-expanded', 'false');
+
+    var badgeHtml = it.badge ? '<span class="badge">'+it.badge+'</span>' : '';
+
+    head.innerHTML =
+      '<span class="row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+ICONS[it.icon]+'</svg></span>'+
+      '<span class="row-body">'+
+        '<span class="row-title">'+it.title+badgeHtml+'</span>'+
+        '<span class="row-sub">'+it.sub+'</span>'+
+      '</span>'+
+      '<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+
+    var panel = document.createElement('div');
+    panel.className = 'row-panel';
+    var actionBtn = it.action === 'copy'
+      ? '<button class="mini-btn" data-copy="'+it.copyVal+'" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+ICONS.copy+'</svg>Kopyala</button>'
+      : '';
+    panel.innerHTML =
+      '<div class="row-panel-inner">'+
+        '<a class="mini-btn" href="'+it.href+'" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+ICONS.ext+'</svg>Aç</a>'+
+        actionBtn+
+      '</div>';
+
+    li.appendChild(head);
+    li.appendChild(panel);
+    list.appendChild(li);
+
+    head.addEventListener('click', function(){
+      var isOpen = li.classList.toggle('open');
+      head.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+  });
+
+  list.addEventListener('click', function(e){
+    var btn = e.target.closest('[data-copy]');
+    if(!btn) return;
+    e.stopPropagation();
+    navigator.clipboard && navigator.clipboard.writeText(btn.getAttribute('data-copy')).then(function(){
+      var original = btn.innerHTML;
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Kopyalandı';
+      setTimeout(function(){ btn.innerHTML = original; }, 1500);
+    });
+  });
+
+  var tabs = document.querySelectorAll('.tab');
+  tabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      tabs.forEach(function(t){ t.classList.remove('active'); });
+      tab.classList.add('active');
+      var target = document.querySelector(tab.getAttribute('data-target'));
+      if(target){ target.scrollIntoView({behavior:'smooth', block:'start'}); }
+    });
+  });
+
+  var vcardBtn = document.getElementById('vcard-btn');
+  vcardBtn.addEventListener('click', function(){
+    var vcard = [
+      'BEGIN:VCARD',
+      'VERSION:3.0',
+      'N:Aldemir;Süleyman;;;',
+      'FN:Süleyman Aldemir',
+      'TEL;TYPE=CELL:+905464704249',
+      'EMAIL:suleymanaldemir657@hotmail.com',
+      'ADR:;;;Balıkesir;;;Türkiye',
+      'URL:https://ozgecmisim-nu.vercel.app',
+      'END:VCARD'
+    ].join('\r\n');
+    var blob = new Blob([vcard], {type:'text/vcard'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'suleyman-aldemir.vcf';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  function updateClock(){
+    var el = document.getElementById('clock');
+    var now = new Date();
+    var formatted = new Intl.DateTimeFormat('tr-TR', {hour:'2-digit', minute:'2-digit', timeZone:'Europe/Istanbul'}).format(now);
+    el.textContent = formatted;
+  }
+  updateClock();
+  setInterval(updateClock, 30000);
+})();
+</script>
+
+
+</body></html>
